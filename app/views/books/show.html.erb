@@ -1,0 +1,13 @@
+<p style="color: green"><%= notice %></p>
+
+<div class="container" style="position: absolute; top:20%;left:20%;">
+
+  <%= render @book %>
+
+    <div style="display: inline">
+        <% if current_user.role.eql?("admin")%>
+          <div style="margin:10px;padding;15px; float:right;"><%= link_to "Edit this book", edit_book_path(@book) %></div>
+          <div style="margin:10px;padding;15px; float:right;"><%= button_to "Destroy this book", @book, method: :delete %></div>
+        <% end %>
+</div>
+
