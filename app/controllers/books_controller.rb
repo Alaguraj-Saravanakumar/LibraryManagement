@@ -4,11 +4,9 @@ class BooksController < ApplicationController
   before_action :ensure_admin_logged_in, only: [ :new, :create, :edit, :update, :destroy ]
 
   def index
-    if params[:search] != nil
-      @books=Book.where("title like '%#{params[:search]}%' OR author like '%#{params[:search]}%'").paginate(page: params[:page], per_page: 5).order('title ASC')
-    else
-      @books=Book.all.paginate(page: params[:page], per_page: 5).order('title ASC') 
-    end
+  #  @books=Book.paginate(page: params[:page], per_page: 3)
+    @books=Book.search(params[:search]).paginate(page: params[:page], per_page: 4).order('title ASC')
+    
   end
 
   def show
@@ -17,6 +15,11 @@ class BooksController < ApplicationController
 
   end
 
+  def books_search
+
+
+  
+  end
 
   def new
     @book = Book.new
@@ -34,7 +37,7 @@ class BooksController < ApplicationController
       if @book.save
         format.html {redirect_to book_url(@book), notice: "Book was successfully created." }
       else
-         format.html { render :new, status: :unprocessable_entity } 
+         render :new, status: :unprocessable_entity    
       end
     end
   end
@@ -45,7 +48,7 @@ class BooksController < ApplicationController
       if @book.update(book_params)
          format.html { redirect_to book_url(@book), notice: "Book was successfully updated." }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+         render :edit, status: :unprocessable_entity
       end
     end
   end
@@ -57,8 +60,8 @@ class BooksController < ApplicationController
     end
   end
 
-  def search
-  end
+    def search
+    end
 
   private
     def set_book

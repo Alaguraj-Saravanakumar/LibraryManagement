@@ -5,9 +5,11 @@
         <thead>
           <tr>
               <th style="text-align:center">Name</th>
-              <th style="text-align:center">Email</th>
-              <th style="text-align:center">Books rented</th>
-               <th style="text-align:center">Rented at</th>
+              <th style="text-align:center">email</th>
+              <% unless current_user.role.eql?("admin")%>
+               <th style="text-align:center">Books rented</th>
+               <th style="text-align:center">rented at</th>
+              <% end %>
           </tr>
         </thead>
 
@@ -15,6 +17,7 @@
           <tr>
             <td style="text-align:center"><%= user.name.capitalize() %></td>
             <td style="text-align:center"><%= user.email%></td>
+          <% unless current_user.role.eql?("admin")%>
             <td>
                 <% @books.each do |book|%>
                   <ul> 
@@ -24,7 +27,7 @@
                   </ul>
                 <% end %>
             </td>
-         <% unless current_user.role.eql?("admin")%>
+
             <td>
               <% @books.each do |book|%>
                     <ul> 
@@ -35,17 +38,6 @@
                 <% end %>
             </td> 
           <% end %> 
-           <% if current_user.role.eql?("admin")%>
-            <td>
-              <% @books.each do |book|%>
-                    <ul> 
-                      <li style="text-decorations:none; color:inherit;text-align:center;"> 
-                          <%= @rented_at.find_by(user_id:user.id,book_id:book.id).created_at%> 
-                      </li>
-                    </ul>
-                <% end %>
-            </td> 
-          <% end %>
 
          
           </tr>

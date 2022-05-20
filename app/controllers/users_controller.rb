@@ -3,11 +3,7 @@ class UsersController < ApplicationController
   before_action :ensure_admin_logged_in, only: [:index]
 
   def index
-    if params[:search] != nil
-      @users=User.where("name like '%#{params[:search]}%'").paginate(page: params[:page], per_page: 5).order('name ASC')
-    else
-      @users=User.all.paginate(page: params[:page], per_page: 5).order('name ASC') 
-    end
+    @users=User.search(params[:search]).paginate(page: params[:page], per_page: 5).order('name ASC')
   end
 
   def show

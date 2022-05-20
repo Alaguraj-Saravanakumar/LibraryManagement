@@ -8,9 +8,9 @@
               <th>Author</th>
               <th>publsihed date</th>
               <% if current_user.role.eql?("admin")%>
-                <th> Book rented by</th>
-                <th> Total books</th>
-                <th> Current books</th>
+              <th> Book rented by</th>
+              <th> Total books</th>
+              <th> Current books</th>
               <% end %>
           </tr>
         </thead>
@@ -21,13 +21,11 @@
             <td><%= book.author %></td>
             <td><%= book.published_date %></td>
              <% if current_user.role.eql?("admin")%>
-                <td > 
-                  <ul>
-                    <% book.users.each do |user| %>
-                      <li style="padding:5px;"><%= link_to user.name.capitalize, user%></li>
-                    <% end %>
-                  </ul>
-              </td>
+                 <td > 
+                  <ul><% book.users.each do |user| %>
+                     <li style="padding:5px;"><%= link_to user.name.capitalize, user%></li>
+                  <% end %></ul>
+                </td>
                <td><%= book.Total_book %></td> 
                <td><%= book.Current_book %></td> 
              <% end %>
@@ -36,6 +34,9 @@
      
   </table>
 
+
+
+    </div>
 
 
 

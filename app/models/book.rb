@@ -4,4 +4,13 @@ class Book < ApplicationRecord
     validates :title, presence: true
     validates :author, presence: true
     validates :published_date, presence: true
+
+    def self.search(search)
+        if search
+          where(["title LIKE? OR author LIKE?","%#{search}%","%#{search}%"])
+        else
+          all
+        end
+    end 
+
 end

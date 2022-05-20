@@ -19,23 +19,21 @@
       <% end %>
 
  <% @users.each do |user| %> 
-    <% unless user.role.eql?("admin")%>
-    <div class="row container">
-      <div class="col s6 m6">
-        <div class="card blue-grey darken-1">
-          <div class="card-content white-text">
-            <span class="card-title" style="font-weight:bold; font-size:30px;color:rgba(236, 180, 166, 0.9);
-            padding-bottom:10px;"><%= user.name.capitalize %></span>
-            <p> <div style="font-size:17px; ">email:  <%= user.email %></div></p>
-            <p></p>
-          </div>
-          <div class="card-action">
-          <%= link_to "Show this user", user %>
-          </div>
+  <div class="row container">
+    <div class="col s6 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title" style="font-weight:bold; font-size:30px;color:rgba(236, 180, 166, 0.9);
+          padding-bottom:10px;"><%= user.name.capitalize %></span>
+          <p> <div style="font-size:17px; ">email:  <%= user.email %></div></p>
+          <p></p>
+        </div>
+        <div class="card-action">
+         <%= link_to "Show this user", user %>
         </div>
       </div>
     </div>
-  <% end %>
+  </div>
 <% end %>
 
 
@@ -44,6 +42,6 @@
     <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
     <li class="active"><%= will_paginate @users%></a></li>
     <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-</ul>
+  </ul>
 
 
