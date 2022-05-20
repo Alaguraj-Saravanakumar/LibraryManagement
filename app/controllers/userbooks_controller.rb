@@ -6,7 +6,7 @@ class UserbooksController < ApplicationController
     @book.Current_book -= 1;
     @book.save
     UserMailer.with(user: current_user,book: @book ).rent_mailer_alert.deliver_later
-    UserMailer.with(user: current_user,book: @book ).reminder_mailer_alert.deliver_later(wait_until: 5.minutes.from_now)
+    UserMailer.with(user: current_user,book: @book ).reminder_mailer_alert.deliver_later(wait_until: 7.days.from_now)
     flash[:notice] = "Book has been added"
     redirect_to current_user
     end
