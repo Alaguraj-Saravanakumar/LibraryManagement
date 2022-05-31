@@ -15,5 +15,83 @@
  *= require_self
  */
 
- 
- 
+.edit_book_path{
+
+    margin:10px;
+    padding:15px; 
+    float:right;
+}
+
+
+.card .card-content .card-title {
+    font-weight:bold; 
+    font-size:30px;
+    color:rgba(236, 180, 166, 0.9);
+    padding-bottom:10px;
+ }
+
+
+.new_book_path
+ {
+    float:right;
+    padding:10px;
+    margin-top:15px;
+    font-size:20px;
+    font-weight:bold;
+ }
+
+ .showindex
+ {
+    position: absolute; 
+    top:20%;
+    left:20%;
+ }
+ .indexpagecontainer {
+    position:absolute;
+    top:25%;
+    left:18%
+ }
+ .indexpagetitle{
+    padding:10px;
+    font-size:2em; 
+    font-weight:bold;
+ }
+ .indexpagecontent
+ {
+    padding:10px;
+    font-size:20px;
+ }
+
+ .sessions-container{
+    border:2px solid black; 
+    padding:10px; 
+    margin:10px;
+    border-radius:20px; 
+    position:absolute; 
+    top:20%; 
+    left:16%; 
+    width:100%;
+ }
+
+ .login_lable{
+    font-size:25px; 
+    font-weight:bold; 
+    padding:10px;
+ }
+
+ .unlessadmin{
+    position:absolute;
+    top:20%;
+    left:20%;
+ }
+
+.unless_admin_response{
+   color: red;
+   font-size:30px;  
+}
+
+.Student_user{
+   text-decoration:none; 
+   color:inherit;
+   text-align:center;
+}

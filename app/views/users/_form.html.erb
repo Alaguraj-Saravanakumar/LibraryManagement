@@ -22,16 +22,14 @@
           <%= form.text_field :email %>
         </div>
 
+    <% !if user.role.eql?("admin")%>
         <div>
           <%= form.label :password, style: "display: block" %>
           <%= form.password_field :password  %>
         </div>
+    <% end %>
 
-
-
-
-
-  <div>
+  <div style="padding-top:10px;">
     <%= form.submit %>
   </div>
 <% end %>

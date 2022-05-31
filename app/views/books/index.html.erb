@@ -1,10 +1,10 @@
 
 
+
       <p style="color: green"><%= notice %></p>
 
       <% if current_user.role.eql?("admin")%>
-            <div  style="float:right;padding:10px;margin-top:15px;
-               font-size:20px;font-weight:bold;"><%= link_to "Add New book", new_book_path %></div>
+            <div  class="new_book_path"><%= link_to "Add New book", new_book_path %></div>
         <% end %>
 
 
@@ -28,8 +28,7 @@
     <div class="col s6 m6">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
-          <span class="card-title" style="font-weight:bold; font-size:30px;color:rgba(236, 180, 166, 0.9);
-          padding-bottom:10px;"><%= book.title.capitalize %></span>
+          <span class="card-title" class="cardtitle" ><%= book.title.capitalize %></span>
           <p> <div style="font-size:17px; ">Author:  <%= book.author %>  ||  Published_at :<%= book.published_date %></div></p>
           <p></p>
         </div>
@@ -38,16 +37,16 @@
           <% unless current_user.role.eql?("admin")%>
               <% unless current_user.books.include?(book)%>
               <% if current_user.books.count() < 3 && book.Current_book > 0%>
-                <td><%= link_to "rent", rent_book_path(book_id:book.id),data:{turbo_method: :post}%></td>
+                <td><%= link_to "Borrow", rent_book_path(book_id:book.id),data:{turbo_method: :post}%></td>
               <% elsif current_user.books.count() == 3 %>
                 <a> User BookLimit reached</a>
-                <% else %>
+              <% else %>
                 <a> book currently not available </a>
               <% end %>
             <% end %>
 
             <% if current_user.books.include?(book)%>
-              <td><%= link_to "unrent", unrent_book_path(book_id:book.id),data:{turbo_method: :post}%></td>
+              <td><%= link_to "return", unrent_book_path(book_id:book.id),data:{turbo_method: :post}%></td>
             <% end %>
           <% end %>
         </div>
@@ -55,13 +54,12 @@
     </div>
   </div>
 <% end %>
+<div>
 
-
-<ul class="pagination" style="position:relative; bottom:20%;left:20%;padding:10px;">
+  <ul class="pagination">
     <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
     <li class="active" ><%= will_paginate @books%></a></li>
     <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
   </ul>
 
        
-</div>

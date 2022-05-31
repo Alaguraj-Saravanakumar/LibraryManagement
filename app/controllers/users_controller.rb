@@ -3,17 +3,17 @@ class UsersController < ApplicationController
   before_action :ensure_admin_logged_in, only: [:index]
 
   def index
-    if params[:search] != nil
+   if params[:search].present?
       @users=User.where("name like '%#{params[:search]}%'").paginate(page: params[:page], per_page: 5).order('name ASC')
     else
       @users=User.all.paginate(page: params[:page], per_page: 5).order('name ASC') 
-    end
+    end  
   end
 
   def show
     @user = User.find(params[:id])
     @books= @user.books
-    @rented_at = BookUser.all
+    @rented_at = BookUser.where(user_id:@user.id)
     respond_to do |format|
       format.html
       format.pdf{render template:'users/report', pdf:'report'}
@@ -24,8 +24,6 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  def edit
-  end
 
   def create
     @user = User.new(user_params)
@@ -69,17 +67,12 @@ class UsersController < ApplicationController
     end
   end
 
-  def admin_path
-
-  end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def user_params
       params.require(:user).permit(:name, :email, :password)
     end

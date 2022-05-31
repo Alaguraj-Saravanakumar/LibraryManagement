@@ -4,7 +4,7 @@ class BooksController < ApplicationController
   before_action :ensure_admin_logged_in, only: [ :new, :create, :edit, :update, :destroy ]
 
   def index
-    if params[:search] != nil
+    if params[:search].present?
       @books=Book.where("title like '%#{params[:search]}%' OR author like '%#{params[:search]}%'").paginate(page: params[:page], per_page: 5).order('title ASC')
     else
       @books=Book.all.paginate(page: params[:page], per_page: 5).order('title ASC') 
@@ -13,19 +13,12 @@ class BooksController < ApplicationController
 
   def show
     @user=current_user
-    @book = Book.find(params[:id])
-
   end
 
 
   def new
     @book = Book.new
   end
-
-
-  def edit
-  end
-
 
   def create
     @book = Book.new(book_params)
@@ -57,8 +50,6 @@ class BooksController < ApplicationController
     end
   end
 
-  def search
-  end
 
   private
     def set_book

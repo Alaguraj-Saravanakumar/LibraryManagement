@@ -1,12 +1,12 @@
 class UserMailer < ApplicationMailer
     def login_alert
-    @user=params[:user]
-    mail(to:@user.email , subject: "Login Alert")
+      @user=params[:user]
+      mail(to:@user.email , subject: "Login Alert")
     end
 
     def new_user_alert
-    @user=params[:user]
-    mail(to:@user.email , subject: "User Signup Alert")
+      @user=params[:user]
+      mail(to:@user.email , subject: "User Signup Alert")
     end
 
     def rent_mailer_alert

@@ -2,8 +2,8 @@ class ApplicationController < ActionController::Base
 
     helper_method :current_user
     def ensure_user_logged_in
-         unless current_user
-            redirect_to(login_path, notice: 'Please login')
+        unless current_user
+          redirect_to(login_path, notice: 'Please login')
         end
     end
 

@@ -1,15 +1,12 @@
-<div class="container" style="border:2px solid black; padding:10px; margin:10px;
-border-radius:20px; position:absolute; top:20%; left:16%; width:100%;">
+<div class="container sessions-container">
 <%= form_with url:login_path do |form| %>
  
-
-
-        <div style="font-size:20px; font-weight:bold; padding=10px;">
+        <div class="login_lable">
           <%= form.label :email, style: "display: block" %>
           <%= form.text_field :email %>
         </div>
 
-        <div style="font-size:20px; font-weight:bold; padding=10px;">
+        <div class="login_lable">
           <%= form.label :password, style: "display: block" %>
           <%= form.password_field :password  %>
         </div>

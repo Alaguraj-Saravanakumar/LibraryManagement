@@ -1,13 +1,15 @@
 <p style="color: green"><%= notice %></p>
 
-<div class="container" style="position: absolute; top:20%;left:20%;">
+<div class="container showindex">
 
   <%= render @book %>
 
     <div style="display: inline">
         <% if current_user.role.eql?("admin")%>
-          <div style="margin:10px;padding;15px; float:right;"><%= link_to "Edit this book", edit_book_path(@book) %></div>
-          <div style="margin:10px;padding;15px; float:right;"><%= button_to "Destroy this book", @book, method: :delete %></div>
+          <div class="edit_book_path"><%= link_to "Edit this book", edit_book_path(@book) %></div>
+          <% if @book.Current_book == @book.Total_book %>
+            <div class="edit_book_path"><%= button_to "Delete this book", @book, method: :delete %></div>
+          <% end %>
         <% end %>
 </div>
 
