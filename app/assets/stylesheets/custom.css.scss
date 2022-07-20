@@ -1,0 +1,45 @@
+@import "materialize";
+
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
+ .active{
+  width:30%;
+  height: 600px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+ }
+
+ .pagination{
+   justify-content: center;
+ }
+ 
+ 
+ .previous_page :disabled{
+   padding:10px;
+ }
+
+ .user_index_page
+ {
+  float:right;
+  padding:10px;
+  margin-top:15px;
+  font-size:20px;
+  font-weight:bold;
+ }
+
+ .User_signup_mailer
+ {
+ text-align:left;
+ padding:10px;
+ }
+

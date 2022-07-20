@@ -1,0 +1,20 @@
+<div class="container sessions-container">
+<%= form_with url:login_path do |form| %>
+ 
+        <div class="login_lable">
+          <%= form.label :email, style: "display: block" %>
+          <%= form.text_field :email %>
+        </div>
+
+        <div class="login_lable">
+          <%= form.label :password, style: "display: block" %>
+          <%= form.password_field :password  %>
+        </div>
+
+
+  <div style="padding:20px;">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+</div>

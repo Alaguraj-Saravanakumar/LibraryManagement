@@ -1,0 +1,25 @@
+
+
+<p style="color: green"><%= notice %></p>
+
+<div class="container unlessadmin">
+    <% unless current_user.role.eql?("admin")%>
+        <% if current_user.id == @user.id %>
+            <%= render @user %>
+        <% else %>
+            <p class="container unless_admin_response">PERMISSION DENIDED </p>
+        <% end %>
+    <% else %>
+      <%= render @user %>
+    <% end %>
+
+    <br/>
+    
+    <div style="display: inline float:right;">
+      <% if current_user.role.eql?("admin")%>
+        <div class="edit_book_path" > <%= link_to "Edit this user", edit_user_path(@user) %> </div>
+        <div class="edit_book_path"> <%= button_to "Delete this user", @user, method: :delete %></div>  
+      <% end %>
+    </div>
+ 
+</div>
