@@ -14,22 +14,21 @@ class MigrateWf
   end
 
   def ensure_rpm
-    debugger
-    time_elapsed = Time.now.to_i - start_time
+    time_elapsed = Time.now.to_i - @start_time
     if time_elapsed < 60
       puts "sleeping for #{60 - time_elapsed} - account #{Account.current.id}"
       sleep(60 - time_elapsed)
     end
-    req_counter = 0
-    self.start_time = Time.now.to_i
+    @req_counter = 0
+    @start_time = Time.now.to_i
   end
 
   def central_push(wf)
-    payload = wf.collect_properties_v2(options)
+    payload = wf.collect_properties_v2(@options)
     payload[:event_uuid] = wf.event_uuid || wf.generate_event_id
     payload = { params: payload, version: 2 }
     res = FreshPipeReSync.new.perform(payload)
-    self.req_counter += 1 if res
+    @req_counter += 1 if res
   end
 
   def migrate_wf(shard_names, rpm)
@@ -41,13 +40,13 @@ class MigrateWf
           Account.current.workflows.where.not(status: Workflow::STATES[:archive]).find_each(batch_size: 500) do |wf|
             BaseRedis.set_key("WF_MIGRATION", Account.current.id) and break if check_redis
             central_push(wf)
-            ensure_rpm if self.req_counter >= rpm
+            ensure_rpm if @req_counter >= rpm
           end
         rescue StandardError => e
           puts "account_id: #{account.id}"
           puts "exception: #{e.inspect}"
           puts '----------------------------------'
-          failed_account_ids.push(account.id)
+          @failed_account_ids.push(account.id)
         ensure
           break if check_redis
           Account.reset_current
@@ -55,6 +54,6 @@ class MigrateWf
       end
       puts "breaking since redis key presents" and break if check_redis
     end
-    puts "failed accounts - #{failed_account_ids}"
+    puts "failed accounts - #{@failed_account_ids}"
   end
 end
