@@ -14,7 +14,6 @@ class MigrateWf
   end
 
   def ensure_rpm
-    debugger
     time_elapsed = Time.now.to_i - start_time
     if time_elapsed < 60
       puts "sleeping for #{60 - time_elapsed} - account #{Account.current.id}"
