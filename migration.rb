@@ -37,7 +37,8 @@ class MigrateWf
         AccountIterator.each(batch_size: 200) do |account|
           next unless account.active?
           account.make_current
-          Account.current.workflows.where.not(status: Workflow::STATES[:archive]).find_each(batch_size: 500) do |wf|
+          ActsAsTenant.current_tenant = account
+          Account.current.all_workflows.find_each(batch_size: 500) do |wf|
             BaseRedis.set_key("WF_MIGRATION", Account.current.id) and break if check_redis
             central_push(wf)
             ensure_rpm if @req_counter >= rpm
