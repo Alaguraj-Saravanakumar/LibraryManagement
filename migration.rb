@@ -15,7 +15,7 @@ class MigrateWf
   def ensure_rpm
     time_elapsed = Time.now.to_i - @start_time
     if time_elapsed < 60
-      puts "sleeping for #{60 - time_elapsed} - account #{Account.current.id}"
+      Rails.logger.info "sleeping for #{60 - time_elapsed} - account #{Account.current.id}"
       sleep(60 - time_elapsed)
     end
     @req_counter = 0
