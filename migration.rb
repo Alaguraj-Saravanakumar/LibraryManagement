@@ -2,7 +2,6 @@ class MigrateWf
   attr_accessor :failed_account_ids, :req_counter, :start_time, :options
 
   def initialize
-    @failed_account_ids = []
     @req_counter = 0
     @start_time = Time.now.to_i
     @options = { payload_type: 'workflow_sync', meta: { 'source' => 'search' } }
@@ -54,13 +53,16 @@ class MigrateWf
         puts "account_id: #{account.id}"
         puts "exception: #{e.inspect}"
         puts '----------------------------------'
-        @failed_account_ids.push(account.id)
+        failed_acc = BaseRedis.get_key('WF_MIGRATION_FAILED_ACCOUNT_IDS') || []
+        failed_acc.push(account.id)
+        BaseRedis.set_key('WF_MIGRATION_FAILED_ACCOUNT_IDS', failed_acc)
       ensure
         puts "breaking since redis key presents" and break if check_redis
         Account.reset_current
       end
       BaseRedis.remove_key("WF_MIGRATION")
     end
-    puts "failed accounts - #{@failed_account_ids}"
+    puts "failed accounts - #{BaseRedis.get_key('WF_MIGRATION_FAILED_ACCOUNT_IDS')}"
+    BaseRedis.remove_key('WF_MIGRATION_FAILED_ACCOUNT_IDS')
   end
 end
