@@ -32,10 +32,10 @@ class MigrateWf
 
   def migrate_wf(shard_name, rpm)
     Sharding.run_on_shard(shard_name) do
-      if BaseRedis.key_exists?("WF_MIGRATION")
-        account = BaseRedis.get_key('WF_MIGRATION').to_i
-        Rails.logger.info "Fetching from redis key - account #{account}"
-        meta = { batch_size: 200, conditions: ['id >= ?', account] }
+      acc = BaseRedis.get_key('WF_MIGRATION')
+      if acc.present?
+        Rails.logger.info "Fetching from redis key - account #{acc.to_i}"
+        meta = { batch_size: 200, conditions: ['id >= ?', acc.to_i] }
       else
         meta = { batch_size: 200 }
       end
