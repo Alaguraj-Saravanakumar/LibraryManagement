@@ -53,9 +53,8 @@ class MigrateWf
         puts "account_id: #{account.id}"
         puts "exception: #{e.inspect}"
         puts '----------------------------------'
-        failed_acc = BaseRedis.get_key('WF_MIGRATION_FAILED_ACCOUNT_IDS') || []
-        failed_acc.push(account.id)
-        BaseRedis.set_key('WF_MIGRATION_FAILED_ACCOUNT_IDS', failed_acc)
+        BaseRedis.smembers('WF_MIGRATION_FAILED_ACCOUNT_IDS')
+        BaseRedis.sadd('WF_MIGRATION_FAILED_ACCOUNT_IDS', account.id)
       ensure
         puts "breaking since redis key presents" and break if check_redis
         Account.reset_current
