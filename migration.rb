@@ -32,35 +32,38 @@ class MigrateWf
 
   def migrate_wf(shard_name, rpm)
     Sharding.run_on_shard(shard_name) do
-      acc = BaseRedis.get_key('WF_MIGRATION')
-      if acc.present?
-        meta = { batch_size: 200, conditions: ['id >= ?', acc.to_i] }
-      else
-        meta = { batch_size: 200 }
-      end
-      log(meta, 'META', self.class.name)
-      AccountIterator.each(meta) do |account|
-        next unless account.active?
-        account.make_current
-        ActsAsTenant.current_tenant = account
-        BaseRedis.set_key("WF_MIGRATION", Account.current.id)
-        log("MIGRATION_START", self.class.name)
-        Account.current.all_workflows.find_each(batch_size: 300) do |wf|
-          break if check_redis
-          central_push(wf)
-          ensure_rpm if @req_counter >= rpm
+      Sharding.run_on_slave do
+        acc = BaseRedis.get_key('WF_MIGRATION')
+        if acc.present?
+          meta = { batch_size: 200, conditions: ['id >= ?', acc.to_i] }
+        else
+          meta = { batch_size: 200 }
         end
-        log("MIGRATION_END", self.class.name)
-      rescue StandardError => e
-        puts "account_id: #{account.id}"
-        puts "exception: #{e.inspect}"
-        puts '----------------------------------'
-        BaseRedis.sadd('WF_MIGRATION_FAILED_ACCOUNT_IDS', account.id)
-      ensure
-        puts "breaking since redis key presents" and break if check_redis
-        Account.reset_current
+        log(meta, 'META', self.class.name)
+
+        AccountIterator.each(meta) do |account|
+          next unless account.active?
+          account.make_current
+          ActsAsTenant.current_tenant = account
+          BaseRedis.set_key("WF_MIGRATION", Account.current.id)
+          log("MIGRATION_START", self.class.name)
+          Account.current.all_workflows.find_each(batch_size: 300) do |wf|
+            break if check_redis
+            central_push(wf)
+            ensure_rpm if @req_counter >= rpm
+          end
+          log("MIGRATION_END", self.class.name)
+        rescue StandardError => e
+          puts "account_id: #{account.id}"
+          puts "exception: #{e.inspect}"
+          puts '----------------------------------'
+          BaseRedis.sadd('WF_MIGRATION_FAILED_ACCOUNT_IDS', account.id)
+        ensure
+          puts "breaking since redis key presents" and break if check_redis
+          Account.reset_current
+        end
+        BaseRedis.remove_key("WF_MIGRATION")
       end
-      BaseRedis.remove_key("WF_MIGRATION")
     end
     puts "failed accounts - #{BaseRedis.smembers('WF_MIGRATION_FAILED_ACCOUNT_IDS')}"
     BaseRedis.remove_key('WF_MIGRATION_FAILED_ACCOUNT_IDS')
