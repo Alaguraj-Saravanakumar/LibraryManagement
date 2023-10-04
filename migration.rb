@@ -26,7 +26,7 @@ class MigrateWf
     payload[:event_uuid] = wf.event_uuid || wf.generate_event_id
     payload = { params: payload, version: 2 }
     res = FreshPipeReSync.new.perform(payload)
-    log("workflow: #{wf.id} res: #{res}", self.class.name)
+    log("workflow: #{wf.id} res: #{res}", self.class.name) unless res
     @req_counter += 1 if res
   end
 
