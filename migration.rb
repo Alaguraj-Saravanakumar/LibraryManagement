@@ -30,7 +30,7 @@ class MigrateWf
     @req_counter += 1 if res
   end
 
-  def migrate_wf(shard_name, rpm)
+  def migrate_wf(shard_name, rpm, accounts_to_exclude)
     Sharding.run_on_shard(shard_name) do
       Sharding.run_on_slave do
         acc = BaseRedis.get_key('WF_MIGRATION')
@@ -42,7 +42,7 @@ class MigrateWf
         log(meta, 'META', self.class.name)
 
         AccountIterator.each(meta) do |account|
-          next unless account.active?
+          next if accounts_to_exclude.include?(account.id)
           account.make_current
           ActsAsTenant.current_tenant = account
           BaseRedis.set_key("WF_MIGRATION", Account.current.id)
