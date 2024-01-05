@@ -1,14 +1,14 @@
 class UserbooksController < ApplicationController
     
     def rent
-    BookUser.create(user_id: current_user.id, book_id: params[:book_id])
-    book = Book.find(params[:book_id])
-    book.Current_book -= 1;
-    book.save
-    UserMailer.with(user: current_user,book: @book ).rent_mailer_alert.deliver_later
-    UserMailer.with(user: current_user,book: @book ).reminder_mailer_alert.deliver_later(wait_until: 7.days.from_now)
-    flash[:notice] = "Book has been added"
-    redirect_to current_user
+      BookUser.create(user_id: current_user.id, book_id: params[:book_id])
+      book = Book.find(params[:book_id])
+      book.Current_book -= 1;
+      book.save
+      UserMailer.with(user: current_user,book: @book ).rent_mailer_alert.deliver_later
+      UserMailer.with(user: current_user,book: @book ).reminder_mailer_alert.deliver_later(wait_until: 7.days.from_now)
+      flash[:notice] = "Book has been added"
+      redirect_to current_user
     end
 
     def unrent
